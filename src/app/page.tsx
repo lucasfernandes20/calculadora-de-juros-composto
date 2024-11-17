@@ -1,4 +1,8 @@
+"use client";
+
+import { HomePage } from "@/pages/home";
+
 export default function Home() {
-  return <div className="bg-primary">ola</div>;
+  return <HomePage />;
 }
 
