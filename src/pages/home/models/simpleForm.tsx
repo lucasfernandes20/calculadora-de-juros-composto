@@ -7,6 +7,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,17 +22,18 @@ import { Trash2Icon } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { FormData } from "..";
 
 interface SimpleFormProps {
-  onSubmit: (arg: unknown) => void;
+  onSubmit: (arg: FormData) => void;
 }
 
 const FormSchema = z.object({
-  initialAmount: z.coerce.number().min(0.01).optional(),
-  monthAmount: z.coerce.number().min(0.01).optional(),
-  fee: z.coerce.number().min(0.01),
+  initialAmount: z.coerce.number().default(0),
+  monthAmount: z.coerce.number().default(0),
+  fee: z.coerce.number().default(0),
   feePeriod: z.union([z.literal("month"), z.literal("year")]),
-  period: z.coerce.number().min(0),
+  period: z.coerce.number().default(0),
   periodType: z.union([z.literal("month"), z.literal("year")]),
 });
 
@@ -41,18 +43,24 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      initialAmount: undefined,
-      monthAmount: undefined,
-      fee: undefined,
+      initialAmount: 0.0,
+      monthAmount: 0,
+      fee: 10,
       feePeriod: "year",
-      period: undefined,
+      period: 0,
       periodType: "year",
     },
   });
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
-    props.onSubmit(data);
+    props.onSubmit({
+      initialAmount: data.initialAmount,
+      monthAmount: data.monthAmount,
+      fee: data.fee,
+      feePeriod: data.feePeriod,
+      period: data.period,
+      periodType: data.periodType,
+    });
   };
 
   const handleClear = () => {
@@ -63,7 +71,7 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-5 grid grid-cols-2 gap-8"
+        className="mt-5 grid grid-cols-2 gap-4 gap-x-12"
       >
         <FormField
           control={form.control}
@@ -73,12 +81,15 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
               <FormLabel>Valor inicial</FormLabel>
               <FormControl>
                 <Input
-                  type="number"
                   placeholder="Digite o valor que já possui"
                   prefix="$"
                   {...field}
+                  mask="currency"
                 />
               </FormControl>
+              <FormMessage>
+                {form.formState.errors.initialAmount?.message}
+              </FormMessage>
             </FormItem>
           )}
         />
@@ -91,17 +102,17 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
               <FormLabel>Valor mensal</FormLabel>
               <FormControl>
                 <Input
-                  type="number"
                   placeholder="Digite o valor que irá investir mensalmente"
                   prefix="$"
                   {...field}
+                  mask="currency"
                 />
               </FormControl>
             </FormItem>
           )}
         />
 
-        <div className="flex items-end">
+        <div className="flex items-end gap-1">
           <FormField
             control={form.control}
             name="fee"
@@ -110,7 +121,6 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
                 <FormLabel>Taxa de juros</FormLabel>
                 <FormControl>
                   <Input
-                    type="number"
                     placeholder="Digite a taxa de juros"
                     prefix="%"
                     {...field}
@@ -143,7 +153,7 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
           />
         </div>
 
-        <div className="flex items-end">
+        <div className="flex items-end gap-1">
           <FormField
             control={form.control}
             name="period"
@@ -152,7 +162,6 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
                 <FormLabel>Período</FormLabel>
                 <FormControl>
                   <Input
-                    type="number"
                     placeholder="Digite o período"
                     className="flex-grow"
                     {...field}
@@ -185,9 +194,9 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mt-2">
           <Button type="submit">Calcular</Button>
-          <Button variant="ghost" type="button" onClick={handleClear}>
+          <Button variant="secondary" type="button" onClick={handleClear}>
             <Trash2Icon />
           </Button>
         </div>

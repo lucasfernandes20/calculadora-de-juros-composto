@@ -9,7 +9,7 @@ body {
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
+    --foreground: 20 14.3% 30.1%;
     --card: 0 0% 100%;
     --card-foreground: 20 14.3% 4.1%;
     --popover: 0 0% 100%;
@@ -19,7 +19,7 @@ body {
     --secondary: 60 4.8% 95.9%;
     --secondary-foreground: 24 9.8% 10%;
     --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
+    --muted-foreground: 25 5.3% 50%;
     --accent: 60 4.8% 95.9%;
     --accent-foreground: 24 9.8% 10%;
     --destructive: 0 84.2% 60.2%;
@@ -72,5 +72,13 @@ body {
   }
   body {
     @apply bg-background text-muted-foreground;
+  }
+
+  h1, h2, h3, h4, h5, h6, svg {
+    @apply font-bold text-foreground;
+  }
+
+  p, span, a, label {
+    @apply text-muted-foreground;
   }
 }
