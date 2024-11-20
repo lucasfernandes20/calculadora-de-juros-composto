@@ -114,7 +114,7 @@ const HomePage = () => {
       <Header />
       <div className="container m-auto flex flex-col gap-4 mb-6">
         <h1 className="text-xl font-bold md:text-2xl">
-          Cálculadora de juros composto
+          Calculadora de juros composto
         </h1>
         <Tabs defaultValue="simple">
           <TabsList className="mb-4">
