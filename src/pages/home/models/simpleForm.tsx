@@ -7,7 +7,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,7 +30,10 @@ interface SimpleFormProps {
 const FormSchema = z.object({
   initialAmount: z.coerce.number().default(0),
   monthAmount: z.coerce.number().default(0),
-  fee: z.coerce.number().default(0),
+  fee: z.coerce
+    .number()
+    .max(1000, { message: "A taxa de juros não pode ser maior que 1000." })
+    .default(0),
   feePeriod: z.union([z.literal("month"), z.literal("year")]),
   period: z.coerce.number().default(0),
   periodType: z.union([z.literal("month"), z.literal("year")]),
@@ -87,9 +89,6 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
                   mask="currency"
                 />
               </FormControl>
-              <FormMessage>
-                {form.formState.errors.initialAmount?.message}
-              </FormMessage>
             </FormItem>
           )}
         />
