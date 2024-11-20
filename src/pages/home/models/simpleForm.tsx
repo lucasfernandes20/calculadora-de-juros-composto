@@ -71,7 +71,7 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-5 grid grid-cols-2 gap-4 gap-x-12"
+        className="mt-5 grid grid-cols-1 gap-4 gap-x-12 md:grid-cols-2"
       >
         <FormField
           control={form.control}
@@ -138,7 +138,7 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <SelectTrigger className="w-[120px]">
+                  <SelectTrigger className="w-[85px] md:w-[120px]">
                     <SelectValue />
                   </SelectTrigger>
                   <FormControl>
@@ -179,7 +179,7 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <SelectTrigger className="w-[120px]">
+                  <SelectTrigger className="w-[85px] md:w-[120px]">
                     <SelectValue />
                   </SelectTrigger>
                   <FormControl>

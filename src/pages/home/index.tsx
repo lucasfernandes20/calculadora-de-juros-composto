@@ -1,35 +1,13 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SimpleForm } from "./models/simpleForm";
 import { useState } from "react";
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import {
-  DollarSignIcon,
-  PercentIcon,
-  TrendingUpIcon,
-  Wallet2Icon,
-} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { currencyFormatter } from "@/utils/currencyFormatter";
+import { CalcResultCard } from "./models/calcResultCard";
+import { ChartCard } from "./models/chartCard";
+import { TableCard } from "./models/tableCard";
+import { Header } from "@/models/header";
 
 export interface FormData {
   initialAmount: number;
@@ -40,22 +18,13 @@ export interface FormData {
   periodType: "year" | "month";
 }
 
-interface FeeData {
+export interface FeeData {
   totalContributed: number;
   totalWithInterest: number;
   date: number;
+  feeOfTheMonth: number;
+  totalFeeUntilNow: number;
 }
-
-const chartConfig = {
-  totalContributed: {
-    label: "Total aportado",
-    color: "#ffc852",
-  },
-  totalWithInterest: {
-    label: "Total com juros",
-    color: "hsl(var(--primary))",
-  },
-} satisfies ChartConfig;
 
 export const HomePage = () => {
   const { toast } = useToast();
@@ -90,11 +59,19 @@ export const HomePage = () => {
     const result: FeeData[] = [];
     let totalWithInterest = initialAmount + monthAmount;
     let totalContributed = initialAmount + monthAmount;
+    let feeOfTheMonth = 0;
 
     for (let month = 1; month <= totalMonths; month++) {
       // Aplicar juros ao total acumulado
       if (month > 1) {
         totalWithInterest *= 1 + monthlyFee;
+      }
+
+      if (month === 1) {
+        feeOfTheMonth = initialAmount * (1 + monthlyFee) - initialAmount;
+      } else {
+        feeOfTheMonth =
+          totalWithInterest * (1 + monthlyFee) - totalWithInterest;
       }
 
       // Adicionar a contribuição mensal (exceto no primeiro mês)
@@ -107,6 +84,8 @@ export const HomePage = () => {
       result.push({
         totalContributed,
         totalWithInterest,
+        feeOfTheMonth: feeOfTheMonth,
+        totalFeeUntilNow: totalWithInterest - totalContributed,
         date: month,
       });
     }
@@ -132,19 +111,11 @@ export const HomePage = () => {
 
   return (
     <div>
-      <header className="border-b-[1px] border-muted mb-4 py-2 ">
-        <div className="container mx-auto flex items-center justify-between">
-          <nav>
-            <ul>
-              <li>
-                <Button variant="link">Cálculadora</Button>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <Header />
       <div className="container m-auto flex flex-col gap-4 mb-6">
-        <h1 className="text-4xl font-bold">Cálculadora de juros composto</h1>
+        <h1 className="text-xl font-bold md:text-2xl">
+          Cálculadora de juros composto
+        </h1>
         <Tabs defaultValue="simple">
           <TabsList className="mb-4">
             <TabsTrigger value="simple">Simplificado</TabsTrigger>
@@ -158,138 +129,38 @@ export const HomePage = () => {
           </Card>
         </Tabs>
         {feeData.length ? (
-          <section className="grid grid-cols-4 gap-4">
-            <Card className="p-6 flex-grow flex flex-col gap-1 justify-start">
-              <div className="flex items-center justify-between w-full">
-                <h4 className="font-semibold text-sm">Total investido</h4>
-                <Wallet2Icon size="1rem" />
-              </div>
-              <span className="text-2xl font-bold text-foreground">
-                {totals.totalContributed}
-              </span>
-            </Card>
-            <Card className="p-6 flex-grow flex flex-col gap-1 justify-start">
-              <div className="flex items-center justify-between w-full">
-                <h4 className="font-semibold text-sm">Total em juros</h4>
-                <TrendingUpIcon size="1rem" />
-              </div>
-              <span className="text-2xl font-bold text-foreground overflow-hidden text-ellipsis whitespace-nowrap">
-                + {totals.totalInterest}
-              </span>
-              <span className="text-xs">Valor originado de juros</span>
-            </Card>
-            <Card className="p-6 flex-grow flex flex-col gap-1 justify-start">
-              <div className="flex items-center justify-between w-full">
-                <h4 className="font-semibold text-sm">Total final</h4>
-                <DollarSignIcon size="1rem" />
-              </div>
-              <span className="text-2xl font-bold text-foreground overflow-hidden text-ellipsis whitespace-nowrap">
-                {totals.totalFinal}
-              </span>
-            </Card>
-            <Card className="p-6 flex-grow flex flex-col gap-1 justify-start">
-              <div className="flex items-center justify-between w-full">
-                <h4 className="font-semibold text-sm">Performance</h4>
-                <PercentIcon size="1rem" />
-              </div>
-              <span className="text-2xl font-bold text-foreground overflow-hidden text-ellipsis whitespace-nowrap">
-                {totals.performancePercentage}
-              </span>
-              <span className="text-xs">Em relação com o que você aportou</span>
-            </Card>
+          <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <CalcResultCard
+              icon="wallet"
+              label="Total investido"
+              value={totals.totalContributed}
+            />
+            <CalcResultCard
+              icon="trending"
+              label="Total em juros"
+              value={totals.totalInterest}
+              subtitle="Valor originado dos juros"
+            />
+            <CalcResultCard
+              icon="dolar"
+              label="Total final"
+              value={totals.totalFinal}
+            />
+            <CalcResultCard
+              icon="percent"
+              label="Performance"
+              value={totals.performancePercentage}
+              subtitle="Em relação com o que você aportou"
+            />
           </section>
-        ) : null}
-        <section className="grid grid-cols-2 gap-4">
-          <Card className="p-6">
-            {feeData && (
-              <ChartContainer config={chartConfig} className="w-full">
-                <LineChart accessibilityLayer data={feeData}>
-                  <XAxis
-                    dataKey="date"
-                    tickLine={false}
-                    tickMargin={5}
-                    axisLine={false}
-                    tickFormatter={(value) => value}
-                  />
-                  <CartesianGrid stroke="#dadada" strokeDasharray="5 5" />
-                  <YAxis
-                    dataKey="totalWithInterest"
-                    tickLine={false}
-                    tickMargin={5}
-                    axisLine={false}
-                    tickFormatter={(value) =>
-                      currencyFormatter({
-                        value,
-                        style: "decimal",
-                        compact: true,
-                      })
-                    }
-                  />
-                  <Line
-                    dataKey="totalContributed"
-                    fill="var(--color-totalContributed)"
-                    stroke="var(--color-totalContributed)"
-                    radius={4}
-                  />
-                  <Tooltip />
-                  <Line
-                    dataKey="totalWithInterest"
-                    fill="var(--color-totalWithInterest)"
-                    stroke="var(--color-totalWithInterest)"
-                    radius={4}
-                  />
-                </LineChart>
-              </ChartContainer>
-            )}
-          </Card>
-          <Card className="p-6 overflow-y-auto h-[400px]">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Mês</TableHead>
-                  <TableHead>Juros</TableHead>
-                  <TableHead>Total investido</TableHead>
-                  <TableHead>Total Juros</TableHead>
-                  <TableHead className="text-right">Total acumulado</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {feeData.map((data) => (
-                  <TableRow key={data.date}>
-                    <TableCell className="font-medium">{data.date}</TableCell>
-                    <TableCell>
-                      {currencyFormatter({
-                        value: data.totalWithInterest - data.totalContributed,
-                        style: "currency",
-                        compact: true,
-                      })}
-                    </TableCell>
-                    <TableCell>
-                      {currencyFormatter({
-                        value: data.totalContributed,
-                        style: "currency",
-                        compact: true,
-                      })}
-                    </TableCell>
-                    <TableCell>
-                      {currencyFormatter({
-                        value: data.totalWithInterest,
-                        style: "currency",
-                        compact: true,
-                      })}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {currencyFormatter({
-                        value: data.totalWithInterest,
-                        style: "currency",
-                        compact: true,
-                      })}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
+        ) : (
+          <p className="text-center mt-4">
+            Preencha com seus números para mostrar os resultados.
+          </p>
+        )}
+        <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <ChartCard data={feeData} />
+          <TableCard data={feeData} />
         </section>
       </div>
     </div>
