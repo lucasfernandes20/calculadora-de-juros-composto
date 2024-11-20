@@ -13,7 +13,7 @@ import {
 import { currencyFormatter } from "@/utils/currencyFormatter";
 
 interface ChartCardProps {
-  data: FeeData[];
+  data?: FeeData[];
 }
 
 const chartConfig = {
@@ -53,8 +53,8 @@ const CustomTooltip: React.FC<{
   );
 };
 
-export const ChartCard: React.FC<ChartCardProps> = (props) => {
-  if (!props.data.length) return null;
+const ChartCard: React.FC<ChartCardProps> = (props) => {
+  if (!props.data?.length) return null;
   return (
     <Card className="p-6">
       <div className="flex flex-col items-center justify-between mb-4 md:flex-row">
@@ -109,3 +109,5 @@ export const ChartCard: React.FC<ChartCardProps> = (props) => {
     </Card>
   );
 };
+
+export default ChartCard;

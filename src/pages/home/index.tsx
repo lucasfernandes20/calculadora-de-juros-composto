@@ -1,13 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SimpleForm } from "./models/simpleForm";
+import SimpleForm from "./models/simpleForm";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { currencyFormatter } from "@/utils/currencyFormatter";
-import { CalcResultCard } from "./models/calcResultCard";
-import { ChartCard } from "./models/chartCard";
-import { TableCard } from "./models/tableCard";
-import { Header } from "@/models/header";
+import CalcResultCard from "./models/calcResultCard";
+import ChartCard from "./models/chartCard";
+import TableCard from "./models/tableCard";
+import Header from "@/models/header";
 
 export interface FormData {
   initialAmount: number;
@@ -26,7 +26,7 @@ export interface FeeData {
   totalFeeUntilNow: number;
 }
 
-export const HomePage = () => {
+const HomePage = () => {
   const { toast } = useToast();
 
   const [feeData, setFeeData] = useState<FeeData[]>([]);
@@ -166,3 +166,5 @@ export const HomePage = () => {
     </div>
   );
 };
+
+export default HomePage;

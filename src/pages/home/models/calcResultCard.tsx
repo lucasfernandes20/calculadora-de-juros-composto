@@ -14,7 +14,7 @@ interface CalcResultCardProps {
   subtitle?: string;
 }
 
-export const CalcResultCard: React.FC<CalcResultCardProps> = (props) => {
+const CalcResultCard: React.FC<CalcResultCardProps> = (props) => {
   const getIcon = (icon: "wallet" | "trending" | "dolar" | "percent") => {
     switch (icon) {
       case "wallet":
@@ -43,3 +43,5 @@ export const CalcResultCard: React.FC<CalcResultCardProps> = (props) => {
     </Card>
   );
 };
+
+export default CalcResultCard;

@@ -41,7 +41,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>;
 
-export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
+const SimpleForm: React.FC<SimpleFormProps> = (props) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -203,3 +203,5 @@ export const SimpleForm: React.FC<SimpleFormProps> = (props) => {
     </Form>
   );
 };
+
+export default SimpleForm;

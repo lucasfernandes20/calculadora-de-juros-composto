@@ -11,7 +11,7 @@ import { Moon, PlayIcon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import React from "react";
 
-export const Header: React.FC = () => {
+const Header: React.FC = () => {
   const { setTheme } = useTheme();
 
   return (
@@ -57,3 +57,5 @@ export const Header: React.FC = () => {
     </header>
   );
 };
+
+export default Header;

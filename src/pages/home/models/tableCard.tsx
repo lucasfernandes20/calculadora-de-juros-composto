@@ -21,17 +21,19 @@ import {
 } from "@/components/ui/tooltip";
 
 interface TableCardProps {
-  data: FeeData[];
+  data?: FeeData[];
 }
 
-export const TableCard: React.FC<TableCardProps> = memo((props) => {
+const TableCard: React.FC<TableCardProps> = memo((props) => {
   const [sort, setSort] = React.useState<"asc" | "desc">("asc");
+
   const getReversedData = useCallback(() => {
+    if (!props.data) return [];
     if (sort === "asc") return props.data;
     return props.data.slice().reverse();
   }, [props.data, sort]);
 
-  if (!props.data.length) return null;
+  if (!props.data?.length) return null;
   return (
     <Card className="p-6 overflow-y-auto h-[450px]">
       <div className="mb-4 flex items-center justify-between">
@@ -119,3 +121,4 @@ export const TableCard: React.FC<TableCardProps> = memo((props) => {
 });
 
 TableCard.displayName = "TableCard";
+export default TableCard;
