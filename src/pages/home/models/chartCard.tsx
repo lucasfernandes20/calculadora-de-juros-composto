@@ -1,5 +1,4 @@
 import React from "react";
-import { FeeData } from "..";
 import { Card } from "@/components/ui/card";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import {
@@ -11,6 +10,7 @@ import {
   YAxis,
 } from "recharts";
 import { currencyFormatter } from "@/utils/currencyFormatter";
+import { FeeData } from "@/utils/calcCompoundFee";
 
 interface ChartCardProps {
   data?: FeeData[];

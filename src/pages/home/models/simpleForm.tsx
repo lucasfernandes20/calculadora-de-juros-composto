@@ -16,15 +16,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CompoundFee } from "@/utils/calcCompoundFee";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trash2Icon } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormData } from "..";
 
 interface SimpleFormProps {
-  onSubmit: (arg: FormData) => void;
+  onSubmit: (arg: CompoundFee) => void;
 }
 
 const FormSchema = z.object({
@@ -35,7 +35,7 @@ const FormSchema = z.object({
     .max(1000, { message: "A taxa de juros não pode ser maior que 1000." })
     .default(0),
   feePeriod: z.union([z.literal("month"), z.literal("year")]),
-  period: z.coerce.number().default(0),
+  period: z.coerce.number().min(1).default(0),
   periodType: z.union([z.literal("month"), z.literal("year")]),
 });
 

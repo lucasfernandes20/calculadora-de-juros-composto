@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/table";
 import { currencyFormatter } from "@/utils/currencyFormatter";
 import React, { memo, useCallback } from "react";
-import { FeeData } from "..";
 import { Button } from "@/components/ui/button";
 import { ArrowDownWideNarrow, ArrowUpNarrowWide } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,13 +18,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { FeeData } from "@/utils/calcCompoundFee";
 
 interface TableCardProps {
   data?: FeeData[];
 }
 
 const TableCard: React.FC<TableCardProps> = memo((props) => {
-  const [sort, setSort] = React.useState<"asc" | "desc">("asc");
+  const [sort, setSort] = React.useState<"asc" | "desc">("desc");
 
   const getReversedData = useCallback(() => {
     if (!props.data) return [];
@@ -73,22 +73,23 @@ const TableCard: React.FC<TableCardProps> = memo((props) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Mês</TableHead>
-            <TableHead>Juros</TableHead>
-            <TableHead>Total investido</TableHead>
-            <TableHead>Total Juros</TableHead>
-            <TableHead className="text-right">Total acumulado</TableHead>
+            <TableHead className="text-xs font-bold">Mês</TableHead>
+            <TableHead className="text-xs font-bold">Juros</TableHead>
+            <TableHead className="text-xs font-bold">Total investido</TableHead>
+            <TableHead className="text-xs font-bold">Total Juros</TableHead>
+            <TableHead className="text-right text-xs font-bold">
+              Total acumulado
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {getReversedData().map((data) => (
             <TableRow key={data.date}>
-              <TableCell className="font-medium">{data.date}</TableCell>
+              <TableCell className="text-xs">{data.date}</TableCell>
               <TableCell>
                 {currencyFormatter({
                   value: data.feeOfTheMonth,
                   style: "currency",
-                  compact: true,
                 })}
               </TableCell>
               <TableCell>

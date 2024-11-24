@@ -26,7 +26,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={cn("flex items-stretch", className)}>
         {prefix && (
-          <p className="bg-primary/70 rounded-tl-lg rounded-bl-lg flex justify-center items-center text-primary-foreground select-none w-10">
+          <p
+            className={cn(
+              "bg-primary/70 rounded-tl-lg rounded-bl-lg flex justify-center items-center text-primary-foreground select-none w-10",
+              props.disabled ? "bg-muted text-muted-foreground/60" : ""
+            )}
+          >
             {prefix}
           </p>
         )}
