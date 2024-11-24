@@ -84,8 +84,8 @@ const calcAdvanceCompoundFee = ({
 
     results.push({
       totalContributed,
-      totalWithInterest: currentAmount,
       date: month,
+      totalWithInterest: currentAmount,
       feeOfTheMonth,
       totalFeeUntilNow: totalFeeAccumulated,
     });
