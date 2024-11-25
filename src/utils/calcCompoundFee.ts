@@ -29,24 +29,22 @@ const calcCompoundFee = ({
   const totalMonths = periodType === "year" ? period * 12 : period;
 
   const result: FeeData[] = [];
-  let totalWithInterest = initialAmount + monthAmount;
-  let totalContributed = initialAmount + monthAmount;
+  let totalWithInterest = initialAmount;
+  let totalContributed = initialAmount;
   let feeOfTheMonth = 0;
 
   for (let month = 1; month <= totalMonths; month++) {
     // Aplicar juros ao total acumulado
     totalWithInterest *= 1 + monthlyFee;
 
+    // Adicionar a contribuição mensal (exceto no primeiro mês)
+    totalContributed += monthAmount;
+    totalWithInterest += monthAmount;
+
     if (month === 1) {
       feeOfTheMonth = initialAmount * (1 + monthlyFee) - initialAmount;
     } else {
       feeOfTheMonth = totalWithInterest * (1 + monthlyFee) - totalWithInterest;
-    }
-
-    // Adicionar a contribuição mensal (exceto no primeiro mês)
-    if (month > 1) {
-      totalContributed += monthAmount;
-      totalWithInterest += monthAmount;
     }
 
     // Salvar os dados do mês atual

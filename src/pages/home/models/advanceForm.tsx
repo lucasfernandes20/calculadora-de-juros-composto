@@ -18,20 +18,32 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash2Icon } from "lucide-react";
+import { InfoIcon, Trash2Icon } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import "./advanceForm.css";
 import { AdvanceCompundFee } from "@/utils/calcAdvanceCompoundFee";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface AdvanceFormProps {
   onSubmit: (arg: AdvanceCompundFee) => void;
 }
 
 const FormSchema = z.object({
-  initialAmount: z.coerce.number().default(0),
-  contributions: z.coerce.number().default(0),
+  initialAmount: z.coerce
+    .string()
+    .default("0,0")
+    .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
+  contributions: z.coerce
+    .string()
+    .default("0,0")
+    .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
   contributionPeriod: z.union([
     z.literal("month"),
     z.literal("year"),
@@ -46,7 +58,10 @@ const FormSchema = z.object({
   period: z.coerce.number().min(1).default(0),
   periodType: z.union([z.literal("month"), z.literal("year")]),
   calcUntilGoal: z.boolean().default(false),
-  goal: z.coerce.number().default(0),
+  goal: z.coerce
+    .string()
+    .default("0,0")
+    .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
   inflationAdjustment: z.boolean().default(false),
   inflationRate: z.coerce.number().default(0),
   reinvestDividends: z.boolean().default(false),
@@ -74,6 +89,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
   });
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
+    console.log(data);
     props.onSubmit({
       initialAmount: data.initialAmount,
       contributions: data.contributions,
@@ -109,6 +125,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                   <Input
                     placeholder="Digite o valor que já possui"
                     prefix="$"
+                    autoComplete="off"
                     {...field}
                     mask="currency"
                   />
@@ -128,6 +145,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                     <Input
                       placeholder="Digite o valor que irá investir mensalmente"
                       prefix="$"
+                      autoComplete="off"
                       {...field}
                       mask="currency"
                     />
@@ -171,6 +189,9 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                   <FormControl>
                     <Input
                       placeholder="Digite a taxa de juros"
+                      min={0}
+                      type="number"
+                      autoComplete="off"
                       prefix="%"
                       {...field}
                     />
@@ -215,9 +236,20 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <FormLabel className="cursor-pointer">
-                    Ajustar aportes pela inflação
-                  </FormLabel>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <FormLabel className="cursor-pointer flex items-center gap-2">
+                          Ajustar os aportes pela inflação anualmente
+                          <InfoIcon className="w-4 h-4 text-muted-foreground/90" />
+                        </FormLabel>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Todo ano será somado ao valor do seu aporte o
+                        equivalente a média da inflação fornecida.
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </FormItem>
               )}
             />
@@ -230,6 +262,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                   <FormControl>
                     <Input
                       placeholder="Digite a inflação no período"
+                      autoComplete="off"
                       type="number"
                       min={0}
                       prefix="%"
@@ -268,7 +301,9 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                     <Input
                       placeholder="Digite a inflação no período"
                       type="number"
+                      autoComplete="off"
                       min={0}
+                      max={100}
                       prefix="%"
                       {...field}
                     />
@@ -291,16 +326,26 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <FormLabel className="cursor-pointer">
-                  Calcular até a meta
-                </FormLabel>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <FormLabel className="cursor-pointer flex items-center gap-2">
+                        Calcular até a meta
+                        <InfoIcon className="w-4 h-4 text-muted-foreground/90" />
+                      </FormLabel>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      O cálculo será feito até que o valor total alcance a meta
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </FormItem>
             )}
           />
           {form.watch("calcUntilGoal") ? (
             <FormField
               control={form.control}
-              name="period"
+              name="goal"
               render={({ field }) => (
                 <FormItem className="flex-grow">
                   <FormLabel>Meta</FormLabel>
@@ -308,9 +353,10 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                     <Input
                       placeholder="Digite a meta"
                       className="flex-grow"
+                      autoComplete="off"
                       prefix="$"
-                      mask="currency"
                       {...field}
+                      mask="currency"
                     />
                   </FormControl>
                 </FormItem>
@@ -328,6 +374,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                       <Input
                         placeholder="Digite o período"
                         className="flex-grow"
+                        autoComplete="off"
                         {...field}
                       />
                     </FormControl>
@@ -343,7 +390,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger className="w-[85px] md:w-[120px]">
+                      <SelectTrigger className="w-[85px] md:w-[220px]">
                         <SelectValue />
                       </SelectTrigger>
                       <FormControl>

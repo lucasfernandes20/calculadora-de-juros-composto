@@ -8,8 +8,14 @@ interface InputProps extends React.ComponentProps<"input"> {
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, prefix, mask, ...props }, ref) => {
     const formatCurrency = (value: string) => {
-      const numberValue = parseFloat(value.replace(/[^0-9]/g, "")) / 100;
-      const formattedValue = numberValue.toFixed(2).replace(",", ".");
+      // Remove todos os caracteres que não são números
+      const numericValue = value.replace(/\D/g, "");
+
+      // Formata o valor como moeda
+      const formattedValue = new Intl.NumberFormat("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(numericValue) / 100);
 
       return formattedValue;
     };

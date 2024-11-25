@@ -51,7 +51,11 @@ const HomePage = () => {
 
     const result = calcCompoundFee(data);
 
-    setTotals(getTotals(result));
+    setTotals(
+      getTotals({
+        data: result,
+      })
+    );
 
     setFeeData(result);
   };
@@ -61,7 +65,7 @@ const HomePage = () => {
 
     const totalMonths = periodType === "year" ? period * 12 : period;
 
-    if (totalMonths > 1_080) {
+    if (totalMonths > 1_080 && !data.calcUntilGoal) {
       toast({
         title: "É muita coisa!",
         description: "O período máximo é de 90 anos.",
@@ -79,10 +83,24 @@ const HomePage = () => {
       });
       return;
     }
+    if (data.calcUntilGoal && data.goal > 10_000_000_000) {
+      toast({
+        title: "Meta muito alta",
+        description: "A meta máxima é de 10 bilhões.",
+        variant: "destructive",
+        duration: 5_000,
+      });
+      return;
+    }
 
     const result = calcAdvanceCompoundFee(data);
 
-    setTotals(getTotals(result));
+    setTotals(
+      getTotals({
+        data: result,
+        showTimeToGoal: data.calcUntilGoal,
+      })
+    );
 
     setFeeData(result);
   };
@@ -96,8 +114,12 @@ const HomePage = () => {
         </h1>
         <Tabs defaultValue="simple">
           <TabsList className="mb-4">
-            <TabsTrigger value="simple">Simplificado</TabsTrigger>
-            <TabsTrigger value="advanced">Avançado</TabsTrigger>
+            <TabsTrigger value="simple" className="select-none">
+              Simplificado
+            </TabsTrigger>
+            <TabsTrigger value="advanced" className="select-none">
+              Avançado
+            </TabsTrigger>
           </TabsList>
           <Card className="p-6">
             <TabsContent value="simple">
@@ -126,12 +148,20 @@ const HomePage = () => {
               label="Total final"
               value={totals.totalFinal}
             />
-            <CalcResultCard
-              icon="percent"
-              label="Performance"
-              value={totals.performancePercentage}
-              subtitle="Em relação com o que você aportou"
-            />
+            {totals.timeToGoal ? (
+              <CalcResultCard
+                icon="calendar"
+                label="Tempo para a meta"
+                value={totals.timeToGoal}
+              />
+            ) : (
+              <CalcResultCard
+                icon="percent"
+                label="Performance"
+                value={totals.performancePercentage}
+                subtitle="Em relação com o que você aportou"
+              />
+            )}
           </section>
         ) : (
           <p className="text-center mt-4">

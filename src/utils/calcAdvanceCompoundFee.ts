@@ -31,71 +31,67 @@ const calcAdvanceCompoundFee = ({
   reinvestDividends,
   reinvestDividendsRate,
 }: AdvanceCompundFee): FeeData[] => {
-  console.log({
-    calcUntilGoal,
-    contributionPeriod,
-    contributions,
-    fee,
-    feePeriod,
-    goal,
-    inflationAdjustment,
-    inflationRate,
-    initialAmount,
-    period,
-    periodType,
-    reinvestDividends,
-    reinvestDividendsRate,
-  });
   const totalMonths = periodType === "year" ? period * 12 : period;
-  const monthlyFee = feePeriod === "year" ? fee / 12 / 100 : fee / 100;
-  const contributionMultiplier =
-    contributionPeriod === "month"
-      ? 1
-      : contributionPeriod === "quarterly"
-      ? 3
-      : contributionPeriod === "semiannual"
-      ? 6
-      : 12;
+  const monthlyFee =
+    feePeriod === "year" ? Math.pow(1 + fee / 100, 1 / 12) - 1 : fee / 100;
+  let contributionMultiplier = 1;
+  let contributionAdjusted = contributions;
 
-  const results: FeeData[] = [];
-
-  let currentAmount = initialAmount;
-  let totalContributed = initialAmount;
-  let totalFeeAccumulated = 0;
-
-  for (let month = 1; month <= totalMonths; month++) {
-    if (month % contributionMultiplier === 0) {
-      currentAmount += contributions;
-      totalContributed += contributions;
-    }
-
-    const feeOfTheMonth = currentAmount * monthlyFee;
-    currentAmount += feeOfTheMonth;
-    totalFeeAccumulated += feeOfTheMonth;
-
-    if (reinvestDividends) {
-      const reinvestment = (reinvestDividendsRate / 100) * feeOfTheMonth;
-      currentAmount += reinvestment;
-    }
-
-    if (inflationAdjustment) {
-      currentAmount -= currentAmount * (inflationRate / 100 / 12);
-    }
-
-    results.push({
-      totalContributed,
-      date: month,
-      totalWithInterest: currentAmount,
-      feeOfTheMonth,
-      totalFeeUntilNow: totalFeeAccumulated,
-    });
-
-    if (calcUntilGoal && currentAmount >= goal) {
+  switch (contributionPeriod) {
+    case "quarterly":
+      contributionMultiplier = 3;
       break;
-    }
+    case "semiannual":
+      contributionMultiplier = 6;
+      break;
+    case "year":
+      contributionMultiplier = 12;
+      break;
+    default:
+      break;
   }
 
-  return results;
+  const result: FeeData[] = [];
+  let totalAccumulated = initialAmount;
+  let totalContributed = initialAmount;
+  let feeOfTheMonth = 0;
+
+  for (
+    let month = 1;
+    calcUntilGoal ? totalAccumulated < goal : month <= totalMonths;
+    month++
+  ) {
+    // Aplicar juros ao total acumulado (se aplicável)
+    if (!!reinvestDividends) {
+      const dividend = totalAccumulated * (1 + monthlyFee) - totalAccumulated;
+      totalAccumulated += dividend * (reinvestDividendsRate / 100);
+      // totalAccumulated *= 1 + monthlyFee;
+    }
+
+    // Ajusta a contribuição pela inflação (se aplicável)
+    if (!!inflationAdjustment && month % 12 === 0) {
+      contributionAdjusted = contributions * (1 + inflationRate / 100);
+    }
+
+    // Aplicar aporte no mês correto
+    if (month % contributionMultiplier === 0 && !!contributionAdjusted) {
+      totalAccumulated += contributionAdjusted;
+      totalContributed += contributionAdjusted;
+    }
+    // Extrair o juros do mês
+    feeOfTheMonth = totalAccumulated * (1 + monthlyFee) - totalAccumulated;
+
+    // Salvar os dados do mês atual
+    result.push({
+      totalContributed,
+      totalWithInterest: totalAccumulated,
+      feeOfTheMonth: feeOfTheMonth,
+      totalFeeUntilNow: totalAccumulated - totalContributed,
+      date: month,
+    });
+  }
+
+  return result;
 };
 
 export default calcAdvanceCompoundFee;
