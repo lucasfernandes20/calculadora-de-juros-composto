@@ -8,8 +8,14 @@ interface InputProps extends React.ComponentProps<"input"> {
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, prefix, mask, ...props }, ref) => {
     const formatCurrency = (value: string) => {
-      const numberValue = parseFloat(value.replace(/[^0-9]/g, "")) / 100;
-      const formattedValue = numberValue.toFixed(2).replace(",", ".");
+      // Remove todos os caracteres que não são números
+      const numericValue = value.replace(/\D/g, "");
+
+      // Formata o valor como moeda
+      const formattedValue = new Intl.NumberFormat("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(numericValue) / 100);
 
       return formattedValue;
     };
@@ -26,7 +32,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={cn("flex items-stretch", className)}>
         {prefix && (
-          <p className="bg-primary/70 rounded-tl-lg rounded-bl-lg flex justify-center items-center text-primary-foreground select-none w-10">
+          <p
+            className={cn(
+              "bg-primary/70 rounded-tl-lg rounded-bl-lg flex justify-center items-center text-primary-foreground select-none w-10",
+              props.disabled ? "bg-muted text-muted-foreground/60" : ""
+            )}
+          >
             {prefix}
           </p>
         )}

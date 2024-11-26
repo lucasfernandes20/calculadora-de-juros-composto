@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import {
+  Calendar1Icon,
   DollarSignIcon,
   PercentIcon,
   TrendingUpIcon,
@@ -9,13 +10,15 @@ import React from "react";
 
 interface CalcResultCardProps {
   label: string;
-  icon: "wallet" | "trending" | "dolar" | "percent";
+  icon: "wallet" | "trending" | "dolar" | "percent" | "calendar";
   value: string;
   subtitle?: string;
 }
 
 const CalcResultCard: React.FC<CalcResultCardProps> = (props) => {
-  const getIcon = (icon: "wallet" | "trending" | "dolar" | "percent") => {
+  const getIcon = (
+    icon: "wallet" | "trending" | "dolar" | "percent" | "calendar"
+  ) => {
     switch (icon) {
       case "wallet":
         return <Wallet2Icon size="1rem" />;
@@ -25,6 +28,8 @@ const CalcResultCard: React.FC<CalcResultCardProps> = (props) => {
         return <DollarSignIcon size="1rem" />;
       case "percent":
         return <PercentIcon size="1rem" />;
+      case "calendar":
+        return <Calendar1Icon size="1rem" />;
       default:
         return <Wallet2Icon size="1rem" />;
     }

@@ -16,26 +16,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CompoundFee } from "@/utils/calcCompoundFee";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trash2Icon } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormData } from "..";
 
 interface SimpleFormProps {
-  onSubmit: (arg: FormData) => void;
+  onSubmit: (arg: CompoundFee) => void;
 }
 
 const FormSchema = z.object({
-  initialAmount: z.coerce.number().default(0),
-  monthAmount: z.coerce.number().default(0),
-  fee: z.coerce
-    .number()
-    .max(1000, { message: "A taxa de juros não pode ser maior que 1000." })
-    .default(0),
+  initialAmount: z.coerce
+    .string()
+    .default("0,0")
+    .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
+  monthAmount: z.coerce
+    .string()
+    .default("0,0")
+    .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
+  fee: z.coerce.number().positive().max(1000).default(0),
   feePeriod: z.union([z.literal("month"), z.literal("year")]),
-  period: z.coerce.number().default(0),
+  period: z.coerce.number().min(1).default(0),
   periodType: z.union([z.literal("month"), z.literal("year")]),
 });
 
@@ -122,6 +125,9 @@ const SimpleForm: React.FC<SimpleFormProps> = (props) => {
                   <Input
                     placeholder="Digite a taxa de juros"
                     prefix="%"
+                    min={0}
+                    max={1000}
+                    type="number"
                     {...field}
                   />
                 </FormControl>
@@ -163,6 +169,8 @@ const SimpleForm: React.FC<SimpleFormProps> = (props) => {
                   <Input
                     placeholder="Digite o período"
                     className="flex-grow"
+                    type="number"
+                    min={0}
                     {...field}
                   />
                 </FormControl>
