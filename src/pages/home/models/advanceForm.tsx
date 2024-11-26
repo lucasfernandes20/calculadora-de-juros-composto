@@ -35,38 +35,44 @@ interface AdvanceFormProps {
   onSubmit: (arg: AdvanceCompundFee) => void;
 }
 
-const FormSchema = z.object({
-  initialAmount: z.coerce
-    .string()
-    .default("0,0")
-    .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
-  contributions: z.coerce
-    .string()
-    .default("0,0")
-    .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
-  contributionPeriod: z.union([
-    z.literal("month"),
-    z.literal("year"),
-    z.literal("quarterly"),
-    z.literal("semiannual"),
-  ]),
-  fee: z.coerce
-    .number()
-    .max(1000, { message: "A taxa de juros não pode ser maior que 1000." })
-    .default(0),
-  feePeriod: z.union([z.literal("month"), z.literal("year")]),
-  period: z.coerce.number().min(1).default(0),
-  periodType: z.union([z.literal("month"), z.literal("year")]),
-  calcUntilGoal: z.boolean().default(false),
-  goal: z.coerce
-    .string()
-    .default("0,0")
-    .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
-  inflationAdjustment: z.boolean().default(false),
-  inflationRate: z.coerce.number().default(0),
-  reinvestDividends: z.boolean().default(false),
-  reinvestDividendsRate: z.coerce.number().default(0),
-});
+const FormSchema = z
+  .object({
+    initialAmount: z.coerce
+      .string()
+      .default("0,0")
+      .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
+    contributions: z.coerce
+      .string()
+      .default("0,0")
+      .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
+    contributionPeriod: z.union([
+      z.literal("month"),
+      z.literal("year"),
+      z.literal("quarterly"),
+      z.literal("semiannual"),
+    ]),
+    fee: z.coerce
+      .number()
+      .max(1000, { message: "A taxa de juros não pode ser maior que 1000." })
+      .default(0),
+    feePeriod: z.union([z.literal("month"), z.literal("year")]),
+    period: z.coerce.number().default(0),
+    periodType: z.union([z.literal("month"), z.literal("year")]),
+    calcUntilGoal: z.boolean().default(false),
+    goal: z.coerce
+      .string()
+      .default("0,0")
+      .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
+    inflationAdjustment: z.boolean().default(false),
+    inflationRate: z.coerce.number().default(0),
+    reinvestDividends: z.boolean().default(false),
+    reinvestDividendsRate: z.coerce.number().default(0),
+  })
+  .refine((data) => data.calcUntilGoal || data.period >= 1, {
+    message:
+      "O período deve ser no mínimo 1, a menos que 'Calcular até a meta' esteja ativado.",
+    path: ["period"],
+  });
 
 type FormValues = z.infer<typeof FormSchema>;
 
@@ -375,6 +381,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                         placeholder="Digite o período"
                         className="flex-grow"
                         autoComplete="off"
+                        type="number"
                         {...field}
                       />
                     </FormControl>
