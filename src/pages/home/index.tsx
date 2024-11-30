@@ -1,3 +1,5 @@
+"use client";
+
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SimpleForm from "./models/simpleForm";
@@ -13,6 +15,7 @@ import AdvanceForm from "./models/advanceForm";
 import calcAdvanceCompoundFee, {
   AdvanceCompundFee,
 } from "@/utils/calcAdvanceCompoundFee";
+import { TextSearchIcon } from "lucide-react";
 
 const HomePage = () => {
   const { toast } = useToast();
@@ -164,9 +167,12 @@ const HomePage = () => {
             )}
           </section>
         ) : (
-          <p className="text-center mt-4">
-            Preencha com seus números para mostrar os resultados.
-          </p>
+          <div className="flex flex-col gap-4 items-center mt-6">
+            <p className="text-center">
+              Preencha com seus números para mostrar os resultados.
+            </p>
+            <TextSearchIcon size="3rem" className="text-muted-foreground" />
+          </div>
         )}
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <ChartCard data={feeData} />

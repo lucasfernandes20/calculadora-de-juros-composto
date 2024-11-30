@@ -34,8 +34,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {prefix && (
           <p
             className={cn(
-              "bg-primary/70 rounded-tl-lg rounded-bl-lg flex justify-center items-center text-primary-foreground select-none w-10",
-              props.disabled ? "bg-muted text-muted-foreground/60" : ""
+              "bg-input rounded-tl-lg rounded-bl-lg flex justify-center items-center text-input-foreground select-none w-10",
+              props.disabled ? "bg-input/40 text-muted-foreground/60" : ""
             )}
           >
             {prefix}

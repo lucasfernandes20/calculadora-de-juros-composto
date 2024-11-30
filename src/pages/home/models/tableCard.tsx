@@ -36,7 +36,7 @@ const TableCard: React.FC<TableCardProps> = memo((props) => {
   if (!props.data?.length) return null;
   return (
     <Card className="px-6 overflow-y-auto h-[450px]">
-      <div className="mb-4 pt-6 pb-2 flex items-center justify-between sticky top-0 bg-background z-10">
+      <div className="mb-4 pt-6 pb-2 flex items-center justify-between sticky top-0 bg-card z-10">
         <h1 className="text-lg">Tabela de dados mensais</h1>
         <TooltipProvider>
           <Tooltip delayDuration={200}>

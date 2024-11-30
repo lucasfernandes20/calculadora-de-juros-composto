@@ -64,9 +64,9 @@ const FormSchema = z
       .default("0,0")
       .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
     inflationAdjustment: z.boolean().default(false),
-    inflationRate: z.coerce.number().default(0),
+    inflationRate: z.coerce.number().positive().default(0),
     reinvestDividends: z.boolean().default(false),
-    reinvestDividendsRate: z.coerce.number().default(0),
+    reinvestDividendsRate: z.coerce.number().positive().default(0),
   })
   .refine((data) => data.calcUntilGoal || data.period >= 1, {
     message:
@@ -270,7 +270,6 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                       placeholder="Digite a inflação no período"
                       autoComplete="off"
                       type="number"
-                      min={0}
                       prefix="%"
                       {...field}
                     />
@@ -308,8 +307,6 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                       placeholder="Digite a inflação no período"
                       type="number"
                       autoComplete="off"
-                      min={0}
-                      max={100}
                       prefix="%"
                       {...field}
                     />

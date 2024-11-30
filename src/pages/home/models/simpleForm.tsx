@@ -16,6 +16,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { CompoundFee } from "@/utils/calcCompoundFee";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trash2Icon } from "lucide-react";
@@ -202,10 +208,19 @@ const SimpleForm: React.FC<SimpleFormProps> = (props) => {
         </div>
 
         <div className="flex items-center gap-2 mt-2">
-          <Button type="submit">Calcular</Button>
-          <Button variant="secondary" type="button" onClick={handleClear}>
-            <Trash2Icon />
+          <Button type="submit" className="font-bold max-w-60 flex-1">
+            Calcular
           </Button>
+          <TooltipProvider>
+            <Tooltip delayDuration={100}>
+              <TooltipTrigger asChild>
+                <Button variant="secondary" type="button" onClick={handleClear}>
+                  <Trash2Icon />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Limpar dados</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </form>
     </Form>

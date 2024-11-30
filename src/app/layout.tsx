@@ -17,17 +17,29 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Calculadora de juros compostos",
+  title: "Calculadora de juros compostos: Online e Grátis",
   description:
-    "Simulador de juros composto para investimento - Cálculos financeiros",
+    "Calculadora de juros compostos online para investimento financeiro. Simulador de investimento financeiro com juros compostos.",
   keywords: [
-    "juros",
     "calculadora juros compostos",
     "investimento",
     "simulador de juros",
     "simulador de investimento",
+    "simulador de juros compostos",
+    "simulador de investimento financeiro",
+    "simulador de juros compostos online",
+    "simulador de investimento financeiro online",
+    "simulador de juros compostos para investimento",
+    "simulador de investimento financeiro para investimento",
     "Capital Rico",
   ],
+  robots: "index, follow",
+  category: "Finance",
+  classification: "Finance",
+  applicationName: "Calculadora de juros compostos - Capital Rico",
+  authors: [{ name: "Capital Rico", url: "https://capitalrico.com" }],
+  creator: "Capital Rico",
+  publisher: "Capital Rico",
 };
 
 export default function RootLayout({
