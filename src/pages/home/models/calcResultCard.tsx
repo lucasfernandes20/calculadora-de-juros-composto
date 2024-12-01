@@ -36,7 +36,7 @@ const CalcResultCard: React.FC<CalcResultCardProps> = (props) => {
   };
 
   return (
-    <Card className="p-6 flex-grow flex flex-col gap-1 justify-start">
+    <Card className="p-6 flex-grow flex flex-col gap-1 justify-start hover:bg-primary/10">
       <div className="flex items-center justify-between w-full">
         <h4 className="font-semibold text-xs md:text-sm">{props.label}</h4>
         {getIcon(props.icon)}
@@ -49,4 +49,16 @@ const CalcResultCard: React.FC<CalcResultCardProps> = (props) => {
   );
 };
 
-export default CalcResultCard;
+const areEqual = (
+  prevProps: CalcResultCardProps,
+  nextProps: CalcResultCardProps
+) => {
+  return (
+    prevProps.icon === nextProps.icon &&
+    prevProps.value === nextProps.value &&
+    prevProps.subtitle === nextProps.subtitle &&
+    prevProps.label === nextProps.label
+  );
+};
+
+export default React.memo(CalcResultCard, areEqual);

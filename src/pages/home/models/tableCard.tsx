@@ -84,7 +84,7 @@ const TableCard: React.FC<TableCardProps> = memo((props) => {
         </TableHeader>
         <TableBody>
           {getReversedData().map((data) => (
-            <TableRow key={data.date}>
+            <TableRow key={data.date} className="hover:bg-primary/10">
               <TableCell className="text-xs">{data.date}</TableCell>
               <TableCell>
                 {currencyFormatter({
