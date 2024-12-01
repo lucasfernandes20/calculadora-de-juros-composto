@@ -10,14 +10,18 @@ export interface Totals {
 }
 
 const formatTimeToGoal = (date: number) => {
-  if (date < 12) return `${date} meses`;
+  if (date < 12) return date > 1 ? `${date} meses` : `${date} mês`;
   const years = Math.floor(date / 12);
   const months = date % 12;
 
   const yearString = years > 1 ? "anos" : "ano";
-  const monthString = months > 1 ? "meses" : "mês";
+  const monthString = !!months
+    ? months > 1
+      ? `e ${months} meses`
+      : `e ${months} mês`
+    : "";
 
-  return `${years} ${yearString} e ${months} ${monthString}`;
+  return `${years} ${yearString} ${monthString}`;
 };
 
 const getTotals = ({
