@@ -113,7 +113,6 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
   });
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
     props.onSubmit({
       initialAmount: data.initialAmount,
       contributions: data.contributions,
