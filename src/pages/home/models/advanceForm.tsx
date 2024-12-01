@@ -8,6 +8,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -64,14 +65,29 @@ const FormSchema = z
       .default("0,0")
       .transform((v) => parseFloat(v.replace(/\./g, "").replace(",", "."))),
     inflationAdjustment: z.boolean().default(false),
-    inflationRate: z.coerce.number().positive().default(0),
+    inflationRate: z.coerce.number().default(0),
     reinvestDividends: z.boolean().default(false),
-    reinvestDividendsRate: z.coerce.number().positive().default(0),
+    reinvestDividendsRate: z.coerce.number().default(0),
   })
   .refine((data) => data.calcUntilGoal || data.period >= 1, {
     message:
       "O período deve ser no mínimo 1, a menos que 'Calcular até a meta' esteja ativado.",
     path: ["period"],
+  })
+  .refine((data) => !data.inflationAdjustment || data.inflationRate >= 1, {
+    message: "A taxa de inflação deve ser um número positivo.",
+    path: ["inflationRate"],
+  })
+  .refine(
+    (data) => !data.reinvestDividends || data.reinvestDividendsRate >= 1,
+    {
+      message: "A taxa de reinvestimento deve ser um número positivo.",
+      path: ["reinvestDividendsRate"],
+    }
+  )
+  .refine((data) => !data.calcUntilGoal || data.goal > 0, {
+    message: "A meta deve ser um número positivo.",
+    path: ["goal"],
   });
 
 type FormValues = z.infer<typeof FormSchema>;
@@ -91,6 +107,8 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
       goal: 0,
       reinvestDividends: true,
       reinvestDividendsRate: 100,
+      inflationAdjustment: false,
+      inflationRate: 0,
     },
   });
 
@@ -228,6 +246,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
               )}
             />
           </div>
+          <FormMessage>{form.formState.errors.fee?.message}</FormMessage>
         </div>
         <div className=" flex flex-col gap-3">
           <div className="flex flex-col gap-4 rounded-lg border p-4 [grid-area:right1]">
@@ -252,7 +271,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                       </TooltipTrigger>
                       <TooltipContent>
                         Todo ano será somado ao valor do seu aporte o
-                        equivalente a média da inflação fornecida.
+                        equivalente a média anual da inflação fornecida.
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -271,9 +290,13 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                       autoComplete="off"
                       type="number"
                       prefix="%"
+                      max={50}
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage>
+                    {form.formState.errors.inflationRate?.message}
+                  </FormMessage>
                 </FormItem>
               )}
             />
@@ -308,9 +331,13 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                       type="number"
                       autoComplete="off"
                       prefix="%"
+                      max={100}
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage>
+                    {form.formState.errors.reinvestDividendsRate?.message}
+                  </FormMessage>
                 </FormItem>
               )}
             />
@@ -362,6 +389,9 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                       mask="currency"
                     />
                   </FormControl>
+                  <FormMessage>
+                    {form.formState.errors.goal?.message}
+                  </FormMessage>
                 </FormItem>
               )}
             />
@@ -391,6 +421,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                 render={({ field }) => (
                   <FormItem>
                     <Select
+                      {...field}
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
@@ -409,10 +440,13 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
               />
             </div>
           )}
+          <FormMessage>{form.formState.errors.period?.message}</FormMessage>
         </div>
 
         <div className="flex items-center gap-2 mt-2 [grid-area:button]">
-          <Button type="submit">Calcular</Button>
+          <Button type="submit" className="font-bold max-w-60 flex-1">
+            Calcular
+          </Button>
           <Button variant="secondary" type="button" onClick={handleClear}>
             <Trash2Icon />
           </Button>
