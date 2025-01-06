@@ -16,6 +16,7 @@ import calcAdvanceCompoundFee, {
   AdvanceCompundFee,
 } from "@/utils/calcAdvanceCompoundFee";
 import { TextSearchIcon } from "lucide-react";
+import Tutorial from "./models/tutorial";
 
 const HomePage = () => {
   const { toast } = useToast();
@@ -178,6 +179,9 @@ const HomePage = () => {
           <ChartCard data={feeData} />
           <TableCard data={feeData} />
         </section>
+      </div>
+      <div className="container m-auto mb-6">
+        <Tutorial />
       </div>
     </div>
   );
