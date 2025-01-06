@@ -54,6 +54,7 @@ const FormSchema = z
     ]),
     fee: z.coerce
       .number()
+      .positive({ message: "A taxa de juros deve ser um número positivo." })
       .max(1000, { message: "A taxa de juros não pode ser maior que 1000." })
       .default(0),
     feePeriod: z.union([z.literal("month"), z.literal("year")]),
@@ -212,7 +213,6 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                   <FormControl>
                     <Input
                       placeholder="Digite a taxa de juros"
-                      min={0}
                       type="number"
                       autoComplete="off"
                       prefix="%"
