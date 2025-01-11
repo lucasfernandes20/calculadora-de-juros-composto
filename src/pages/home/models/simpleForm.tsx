@@ -217,8 +217,8 @@ const SimpleForm: React.FC<SimpleFormProps> = (props) => {
           <TooltipProvider>
             <Tooltip delayDuration={100}>
               <TooltipTrigger asChild>
-                <Button variant="secondary" type="button" onClick={handleClear}>
-                  <Trash2Icon />
+                <Button variant="outline" type="button" onClick={handleClear}>
+                  <Trash2Icon className="text-primary" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Limpar dados</TooltipContent>
