@@ -446,8 +446,13 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
           <Button type="submit" className="font-bold max-w-60 flex-1">
             Calcular
           </Button>
-          <Button variant="secondary" type="button" onClick={handleClear}>
-            <Trash2Icon />
+          <Button
+            variant="outline"
+            size="icon"
+            type="button"
+            onClick={handleClear}
+          >
+            <Trash2Icon className="text-primary" />
           </Button>
         </div>
       </form>

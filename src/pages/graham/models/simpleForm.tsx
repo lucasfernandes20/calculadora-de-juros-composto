@@ -65,7 +65,7 @@ const SimpleForm: React.FC<SimpleFormProps> = (props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-5 grid grid-cols-1 gap-4 gap-x-12 md:grid-cols-2"
+        className="grid grid-cols-1 gap-4 gap-x-12 md:grid-cols-2"
       >
         <FormField
           control={form.control}
@@ -102,7 +102,12 @@ const SimpleForm: React.FC<SimpleFormProps> = (props) => {
           <TooltipProvider>
             <Tooltip delayDuration={100}>
               <TooltipTrigger asChild>
-                <Button variant="outline" type="button" onClick={handleClear}>
+                <Button
+                  variant="outline"
+                  type="button"
+                  size="icon"
+                  onClick={handleClear}
+                >
                   <Trash2Icon className="text-primary" />
                 </Button>
               </TooltipTrigger>
