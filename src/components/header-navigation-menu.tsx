@@ -15,13 +15,13 @@ import { ListItem } from "./ui/list-item";
 
 const calculators: { title: string; href: string; description: string }[] = [
   {
-    title: "Cálculadora de juros compostos",
+    title: "Calculadora de juros compostos",
     href: "/",
     description:
       "Para calcular o montante de um investimento com juros compostos.",
   },
   {
-    title: "Cálculadora de Graham",
+    title: "Calculadora de Graham",
     href: "/graham",
     description:
       "Para calcular o valor intrínseco de uma ação de acordo com a fórmula de Benjamin Graham.",
@@ -73,7 +73,7 @@ const HeaderNavigationMenu = () => {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Cálculadoras</NavigationMenuTrigger>
+          <NavigationMenuTrigger>Calculadoras</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-4 w-[200px] md:w-[400px] md:grid-cols-2 lg:w-[600px]">
               {calculators.map((calculator) => (
