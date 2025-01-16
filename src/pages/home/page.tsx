@@ -14,7 +14,7 @@ import AdvanceForm from "./models/advanceForm";
 import calcAdvanceCompoundFee, {
   AdvanceCompundFee,
 } from "@/utils/calcAdvanceCompoundFee";
-import { TextSearchIcon } from "lucide-react";
+import { CalculatorIcon } from "lucide-react";
 import Tutorial from "./models/tutorial";
 
 const HomePage = () => {
@@ -111,9 +111,12 @@ const HomePage = () => {
   return (
     <div>
       <div className="container m-auto flex flex-col gap-4 mb-6">
-        <h1 className="text-xl font-bold md:text-2xl">
-          Calculadora de juros composto
+        <h1 className="text-2xl font-bold md:text-3xl text-center">
+          Calculadora de juros compostos
         </h1>
+        <p className="text-center text-muted-foreground text-sm md:text-base mb-4">
+          Calcule o rendimento de seus investimentos ao longo do tempo.
+        </p>
         <Tabs defaultValue="simple">
           <TabsList className="mb-4">
             <TabsTrigger value="simple" className="select-none">
@@ -166,11 +169,11 @@ const HomePage = () => {
             )}
           </section>
         ) : (
-          <div className="flex flex-col gap-4 items-center mt-6">
+          <div className="flex flex-col md:flex-row gap-2 items-center justify-center mt-6 text-muted-foreground text-sm md:text-base">
+            <CalculatorIcon size="1rem" className="text-muted-foreground" />
             <p className="text-center">
               Preencha com seus números para mostrar os resultados.
             </p>
-            <TextSearchIcon size="3rem" className="text-muted-foreground" />
           </div>
         )}
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2">

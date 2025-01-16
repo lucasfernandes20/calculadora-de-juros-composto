@@ -1,11 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Moon, Sun } from "lucide-react";
+import { BadgeDollarSignIcon, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import React from "react";
 import HeaderSheet from "@/components/header-sheet";
 import HeaderNavigationMenu from "@/components/header-navigation-menu";
+import Link from "next/link";
 
 const Header: React.FC = () => {
   const { setTheme, theme } = useTheme();
@@ -13,7 +14,12 @@ const Header: React.FC = () => {
   return (
     <header className="border-b-[1px] border-muted shadow-sm mb-6">
       <div className="container py-3 flex items-center justify-between">
-        <h1 className="text-xl">Capital Rico</h1>
+        <Link href="/">
+          <h1 className="text-xl flex items-center gap-2 select-none">
+            <BadgeDollarSignIcon />
+            Capital Rico
+          </h1>
+        </Link>
         <HeaderSheet />
 
         <div className="hidden md:inline-block">
