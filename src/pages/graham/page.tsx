@@ -5,7 +5,7 @@ import SimpleForm from "./models/simpleForm";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
 import { currencyFormatter } from "@/utils/currencyFormatter";
-import { TextSearchIcon } from "lucide-react";
+import { CalculatorIcon } from "lucide-react";
 import Image from "next/image";
 import books from "@/data/books.json";
 
@@ -23,9 +23,13 @@ const GrahamPage: React.FC = () => {
 
   return (
     <div className="container m-auto flex flex-col gap-4 mb-6">
-      <h1 className="text-xl font-bold md:text-2xl">
+      <h1 className="text-2xl font-bold md:text-3xl text-center">
         Calculadora de Benjamin Graham
       </h1>
+      <p className="text-center text-muted-foreground text-sm md:text-base mb-4">
+        Calcule o valor intrínseco de uma ação de acordo com a fórmula de
+        Graham.
+      </p>
       <Card className="p-6">
         <SimpleForm onSubmit={onSubmit} />
       </Card>
@@ -44,11 +48,11 @@ const GrahamPage: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-4 items-center mt-6">
+        <div className="flex flex-col md:flex-row gap-2 items-center justify-center mt-6 text-muted-foreground text-sm md:text-base">
+          <CalculatorIcon size="1rem" className="text-muted-foreground" />
           <p className="text-center">
-            Preencha com os números da ação para mostrar os resultados.
+            Preencha com os números da ação para calcular o valor intrínseco.
           </p>
-          <TextSearchIcon size="3rem" className="text-muted-foreground" />
         </div>
       )}
       <Card className="p-6 mt-4">
