@@ -1,6 +1,5 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import {
   CartesianGrid,
   Line,
@@ -8,47 +7,56 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  ResponsiveContainer,
 } from "recharts";
 import { currencyFormatter } from "@/utils/currencyFormatter";
 import { FeeData } from "@/utils/calcCompoundFee";
+import { BarChart3Icon } from "lucide-react";
 
 interface ChartCardProps {
   data?: FeeData[];
 }
 
-const chartConfig = {
-  totalContributed: {
-    label: "Total aportado",
-    color: "hsl(var(--chart-3))",
-  },
-  totalWithInterest: {
-    label: "Total com juros",
-    color: "hsl(var(--chart-1))",
-  },
-} satisfies ChartConfig;
+interface TooltipPayload {
+  value: number;
+  payload?: {
+    date: string;
+  };
+}
 
 const CustomTooltip: React.FC<{
-  payload?: { value: number }[];
+  payload?: TooltipPayload[];
   label?: string;
   active?: boolean;
 }> = ({ payload, active }) => {
   if (!active || !payload) return null;
   return (
-    <div className="custom-tooltip bg-primary p-4 rounded-md">
-      <p className="label text-primary-foreground text-base">{`Total investido : ${currencyFormatter(
-        {
-          value: payload[0]?.value,
-          style: "decimal",
-          compact: true,
-        }
-      )}`}</p>
-      <p className="label text-primary-foreground text-base">{`Total com juros : ${currencyFormatter(
-        {
-          value: payload[1]?.value,
-          style: "decimal",
-          compact: true,
-        }
-      )}`}</p>
+    <div className="custom-tooltip bg-background border border-border p-4 rounded-md shadow-md">
+      <p className="text-base font-medium mb-2">Período: {payload[0]?.payload?.date}</p>
+      <div className="flex flex-col gap-1.5">
+        <p className="text-sm flex items-center gap-2">
+          <span className="bg-chart-3 h-3 w-3 rounded-full inline-block"></span>
+          <span>Total investido: </span>
+          <span className="font-semibold">
+            {currencyFormatter({
+              value: payload[0]?.value,
+              style: "decimal",
+              compact: false,
+            })}
+          </span>
+        </p>
+        <p className="text-sm flex items-center gap-2">
+          <span className="bg-chart-1 h-3 w-3 rounded-full inline-block"></span>
+          <span>Total com juros: </span>
+          <span className="font-semibold">
+            {currencyFormatter({
+              value: payload[1]?.value,
+              style: "decimal",
+              compact: false,
+            })}
+          </span>
+        </p>
+      </div>
     </div>
   );
 };
@@ -56,56 +64,71 @@ const CustomTooltip: React.FC<{
 const ChartCard: React.FC<ChartCardProps> = (props) => {
   if (!props.data?.length) return null;
   return (
-    <Card className="p-6">
-      <div className="flex flex-col items-center justify-between mb-4 md:flex-row">
-        <h1 className="text-lg">Gráfico visão geral</h1>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1">
-            <div className="bg-chart-1 h-4 w-4 rounded-full"></div>
-            <span className="text-sm">Total acúmulado</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="bg-chart-3 h-4 w-4 rounded-full"></div>
-            <span className="text-sm">Total investido</span>
-          </div>
+    <Card className="p-6 overflow-hidden">
+      <div className="flex flex-col items-start gap-2 mb-6">
+        <div className="flex items-center gap-2 text-primary">
+          <BarChart3Icon className="h-5 w-5" />
+          <h2 className="text-lg font-medium">Evolução do Investimento</h2>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Visualize o crescimento do seu investimento ao longo do tempo
+        </p>
+      </div>
+      
+      <div className="flex flex-wrap items-center justify-center gap-4 mb-4 text-sm">
+        <div className="flex items-center gap-2 bg-chart-1/10 px-3 py-1.5 rounded-full">
+          <div className="bg-chart-1 h-3 w-3 rounded-full"></div>
+          <span>Total acumulado</span>
+        </div>
+        <div className="flex items-center gap-2 bg-chart-3/10 px-3 py-1.5 rounded-full">
+          <div className="bg-chart-3 h-3 w-3 rounded-full"></div>
+          <span>Total investido</span>
         </div>
       </div>
-      <ChartContainer config={chartConfig} className="w-full -ml-4">
-        <LineChart accessibilityLayer data={props.data}>
-          <XAxis
-            dataKey="date"
-            tickLine={false}
-            tickMargin={5}
-            axisLine={false}
-            tickFormatter={(value) => value}
-          />
-          <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="5 5" />
-          <YAxis
-            dataKey="totalWithInterest"
-            tickLine={false}
-            tickMargin={5}
-            axisLine={false}
-            tickFormatter={(value) =>
-              currencyFormatter({
-                value,
-                style: "decimal",
-                compact: true,
-              })
-            }
-          />
-          <Line
-            dataKey="totalContributed"
-            fill="var(--color-totalContributed)"
-            stroke="var(--color-totalContributed)"
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Line
-            dataKey="totalWithInterest"
-            fill="var(--color-totalWithInterest)"
-            stroke="var(--color-totalWithInterest)"
-          />
-        </LineChart>
-      </ChartContainer>
+      
+      <div className="h-[300px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={props.data} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
+            <XAxis 
+              dataKey="date"
+              tickLine={false}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              tick={{ fontSize: 12 }}
+              tickFormatter={(value) => value}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              tick={{ fontSize: 12 }}
+              tickFormatter={(value) =>
+                currencyFormatter({
+                  value,
+                  style: "decimal",
+                  compact: true,
+                })
+              }
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Line
+              type="monotone"
+              dataKey="totalContributed"
+              stroke="hsl(var(--chart-3))"
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 6, strokeWidth: 0 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="totalWithInterest"
+              stroke="hsl(var(--chart-1))"
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 6, strokeWidth: 0 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </Card>
   );
 };

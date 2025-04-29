@@ -138,122 +138,132 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="advanceForm">
-        <div className=" flex flex-col gap-2">
-          <FormField
-            control={form.control}
-            name="initialAmount"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Valor inicial</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Digite o valor que já possui"
-                    prefix="$"
-                    autoComplete="off"
-                    {...field}
-                    mask="currency"
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <div className="flex items-end gap-1">
+        <div className="flex flex-col gap-3 [grid-area:left]">
+          <div className="advanced-section">
+            <h3>Valores de investimento</h3>
+            
             <FormField
               control={form.control}
-              name="contributions"
+              name="initialAmount"
               render={({ field }) => (
-                <FormItem className="flex-grow">
-                  <FormLabel>Aportes</FormLabel>
+                <FormItem>
+                  <FormLabel>Valor inicial</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Digite o valor que irá investir mensalmente"
+                      placeholder="Digite o valor que já possui"
                       prefix="$"
                       autoComplete="off"
                       {...field}
                       mask="currency"
+                      className="advanced-input"
                     />
                   </FormControl>
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="contributionPeriod"
-              render={({ field }) => (
-                <FormItem>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger className="w-[85px] md:w-[120px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <FormControl>
-                      <SelectContent>
-                        <SelectItem value="month">Mensal</SelectItem>
-                        <SelectItem value="quarterly">Trimestral</SelectItem>
-                        <SelectItem value="semiannual">Semestral</SelectItem>
-                        <SelectItem value="year">Anual</SelectItem>
-                      </SelectContent>
-                    </FormControl>
-                  </Select>
-                </FormItem>
-              )}
-            />
-          </div>
 
-          <div className="flex items-end gap-1">
-            <FormField
-              control={form.control}
-              name="fee"
-              render={({ field }) => (
-                <FormItem className="flex-grow">
-                  <FormLabel>Taxa de juros</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Digite a taxa de juros"
-                      type="number"
-                      autoComplete="off"
-                      prefix="%"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="feePeriod"
-              render={({ field }) => (
-                <FormItem>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger className="w-[85px] md:w-[120px]">
-                      <SelectValue />
-                    </SelectTrigger>
+            <div className="flex items-end gap-2">
+              <FormField
+                control={form.control}
+                name="contributions"
+                render={({ field }) => (
+                  <FormItem className="flex-grow">
+                    <FormLabel>Aportes</FormLabel>
                     <FormControl>
-                      <SelectContent>
-                        <SelectItem value="month">Mensal</SelectItem>
-                        <SelectItem value="year">Anual</SelectItem>
-                      </SelectContent>
+                      <Input
+                        placeholder="Digite o valor que irá investir"
+                        prefix="$"
+                        autoComplete="off"
+                        {...field}
+                        mask="currency"
+                        className="advanced-input"
+                      />
                     </FormControl>
-                  </Select>
-                </FormItem>
-              )}
-            />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="contributionPeriod"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-[105px] md:w-[120px] advanced-input">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <FormControl>
+                        <SelectContent>
+                          <SelectItem value="month">Mensal</SelectItem>
+                          <SelectItem value="quarterly">Trimestral</SelectItem>
+                          <SelectItem value="semiannual">Semestral</SelectItem>
+                          <SelectItem value="year">Anual</SelectItem>
+                        </SelectContent>
+                      </FormControl>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="flex items-end gap-2">
+              <FormField
+                control={form.control}
+                name="fee"
+                render={({ field }) => (
+                  <FormItem className="flex-grow">
+                    <FormLabel>Taxa de juros</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Digite a taxa de juros"
+                        type="number"
+                        autoComplete="off"
+                        prefix="%"
+                        {...field}
+                        className="advanced-input"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="feePeriod"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-[105px] md:w-[120px] advanced-input">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <FormControl>
+                        <SelectContent>
+                          <SelectItem value="month">Mensal</SelectItem>
+                          <SelectItem value="year">Anual</SelectItem>
+                        </SelectContent>
+                      </FormControl>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormMessage>{form.formState.errors.fee?.message}</FormMessage>
           </div>
-          <FormMessage>{form.formState.errors.fee?.message}</FormMessage>
         </div>
-        <div className=" flex flex-col gap-3">
-          <div className="flex flex-col gap-4 rounded-lg border p-4 [grid-area:right1]">
+
+        <div className="flex flex-col gap-3 [grid-area:right1]">
+          <div className="advanced-section">
+            <h3>Ajuste pela inflação</h3>
+            
             <FormField
               control={form.control}
               name="inflationAdjustment"
               render={({ field }) => (
-                <FormItem className="flex items-end gap-2">
+                <FormItem className="flex items-center gap-2">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
@@ -264,7 +274,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <FormLabel className="cursor-pointer flex items-center gap-2">
-                          Ajustar os aportes pela inflação anualmente
+                          Ajustar aportes pela inflação anualmente
                           <InfoIcon className="w-4 h-4 text-muted-foreground/90" />
                         </FormLabel>
                       </TooltipTrigger>
@@ -291,6 +301,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                       prefix="%"
                       max={50}
                       {...field}
+                      className="advanced-input"
                     />
                   </FormControl>
                   <FormMessage>
@@ -300,12 +311,17 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
               )}
             />
           </div>
-          <div className="flex flex-col gap-4 rounded-lg border p-4 [grid-area:right2]">
+        </div>
+
+        <div className="flex flex-col gap-3 [grid-area:right2]">
+          <div className="advanced-section">
+            <h3>Dividendos</h3>
+            
             <FormField
               control={form.control}
               name="reinvestDividends"
               render={({ field }) => (
-                <FormItem className="flex items-end gap-2">
+                <FormItem className="flex items-center gap-2">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
@@ -326,12 +342,13 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                 <FormItem className="flex-grow">
                   <FormControl>
                     <Input
-                      placeholder="Digite a inflação no período"
+                      placeholder="Taxa de reinvestimento"
                       type="number"
                       autoComplete="off"
                       prefix="%"
                       max={100}
                       {...field}
+                      className="advanced-input"
                     />
                   </FormControl>
                   <FormMessage>
@@ -343,12 +360,14 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 rounded-lg border p-4 [grid-area:bottom]">
+        <div className="advanced-section [grid-area:bottom]">
+          <h3>Período ou Meta</h3>
+          
           <FormField
             control={form.control}
             name="calcUntilGoal"
             render={({ field }) => (
-              <FormItem className="flex items-end gap-2">
+              <FormItem className="flex items-center gap-2">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -381,7 +400,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                   <FormControl>
                     <Input
                       placeholder="Digite a meta"
-                      className="flex-grow"
+                      className="flex-grow advanced-input"
                       autoComplete="off"
                       prefix="$"
                       {...field}
@@ -395,7 +414,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
               )}
             />
           ) : (
-            <div className="flex items-end gap-1 ">
+            <div className="flex items-end gap-2">
               <FormField
                 control={form.control}
                 name="period"
@@ -405,7 +424,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                     <FormControl>
                       <Input
                         placeholder="Digite o período"
-                        className="flex-grow"
+                        className="flex-grow advanced-input"
                         autoComplete="off"
                         type="number"
                         {...field}
@@ -424,7 +443,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger className="w-[85px] md:w-[220px]">
+                      <SelectTrigger className="w-[105px] md:w-[120px] advanced-input">
                         <SelectValue />
                       </SelectTrigger>
                       <FormControl>
@@ -442,8 +461,8 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
           <FormMessage>{form.formState.errors.period?.message}</FormMessage>
         </div>
 
-        <div className="flex items-center gap-2 mt-2 [grid-area:button]">
-          <Button type="submit" className="font-bold max-w-60 flex-1">
+        <div className="flex items-center gap-3 mt-2 [grid-area:button]">
+          <Button type="submit" className="font-medium max-w-60 flex-1 shadow-sm gap-2" size="lg">
             Calcular
           </Button>
           <Button
@@ -451,8 +470,9 @@ const AdvanceForm: React.FC<AdvanceFormProps> = (props) => {
             size="icon"
             type="button"
             onClick={handleClear}
+            className="h-10 w-10"
           >
-            <Trash2Icon className="text-primary" />
+            <Trash2Icon className="text-primary h-4 w-4" />
           </Button>
         </div>
       </form>

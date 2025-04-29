@@ -1,100 +1,107 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
-import { InfoIcon } from "lucide-react";
+import { BookOpenIcon, LightbulbIcon } from "lucide-react";
 
 const Tutorial: React.FC = () => {
   return (
-    <Card className="p-6 mb-6">
-      <div className="flex items-center gap-2 mb-4">
-        <InfoIcon className="w-6 h-6 text-primary" />
-        <h2 className="text-xl font-bold text-primary">
+    <Card className="border-primary/10 mt-6 overflow-hidden">
+      <div className="bg-primary/5 px-6 py-4 border-b flex items-center gap-3">
+        <LightbulbIcon className="text-primary h-5 w-5" />
+        <h2 className="text-lg font-medium text-primary">
           Como usar a Calculadora de Juros Compostos
         </h2>
       </div>
-      <div className="space-y-4">
-        <p className="text-base text-foreground">
-          A calculadora de juros compostos é uma ferramenta poderosa para
-          ajudá-lo a entender como seus investimentos podem crescer ao longo do
-          tempo. Aqui está um guia rápido sobre como usá-la e qual é a sua
-          finalidade.
+      
+      <div className="p-6">
+        <p className="text-muted-foreground mb-6">
+          A calculadora de juros compostos é uma ferramenta essencial para visualizar o crescimento potencial dos seus investimentos. 
+          Entenda como utilizá-la para planejar melhor seu futuro financeiro.
         </p>
-        <h3 className="text-lg font-semibold text-primary">Passo a Passo:</h3>
-        <ol className="list-decimal list-inside space-y-2 text-base text-foreground">
-          <li>
-            <strong>Valor Inicial:</strong> Insira o valor que você já possui
-            investido.
-          </li>
-          <li>
-            <strong>Aportes:</strong> Digite o valor que você planeja investir
-            regularmente (mensalmente, trimestralmente, etc.).
-          </li>
-          <li>
-            <strong>Período de Aporte:</strong> Selecione a frequência dos seus
-            aportes (mensal, anual, trimestral, semestral).
-          </li>
-          <li>
-            <strong>Taxa de Juros:</strong> Insira a taxa de juros esperada para
-            o seu investimento.
-          </li>
-          <li>
-            <strong>Período:</strong> Defina o período total do investimento (em
-            meses ou anos).
-          </li>
-          <li>
-            <strong>Calcular até a Meta:</strong> Se você tem uma meta
-            específica, insira o valor da meta e marque esta opção.
-          </li>
-          <li>
-            <strong>Ajuste pela Inflação:</strong> Se desejar ajustar seus
-            aportes pela inflação, marque esta opção e insira a taxa de inflação
-            esperada.
-          </li>
-          <li>
-            <strong>Reinvestimento de Dividendos:</strong> Se você planeja
-            reinvestir os dividendos, mantenha esta opção marcada e insira a
-            taxa de reinvestimento.
-          </li>
-          <li>
-            Clique no botão <strong>Calcular</strong> para ver os resultados.
-          </li>
-        </ol>
-        <h3 className="text-lg font-semibold text-primary">Finalidade:</h3>
-        <p className="text-base text-foreground">
-          A finalidade da calculadora de juros compostos é ajudá-lo a visualizar
-          o crescimento potencial dos seus investimentos ao longo do tempo. Com
-          ela, você pode planejar melhor suas finanças e tomar decisões mais
-          informadas sobre onde e como investir seu dinheiro.
-        </p>
-      </div>
-      <div className="mt-6">
-        <iframe
-          className="w-1/2 aspect-video m-auto rounded-md shadow-md"
-          src="https://www.youtube.com/embed/KnHGvReXzV0"
-          title="Vídeo Tutorial"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
-      <div className="mt-6 text-center">
-        <p className="text-base text-foreground">
-          👉 Se você quiser{" "}
-          <span className="bg-primary text-primary-foreground font-semibold p-1">
-            aprender mais sobre investimentos
-          </span>{" "}
-          e fazer parte de uma comunidade sobre o assunto,{" "}
-          <span className="bg-primary text-primary-foreground font-semibold p-1">
-            inscreva-se no nosso canal do YouTube! ✅
-          </span>
-        </p>
-        <a
-          href="https://www.youtube.com/@capitalrico"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block mt-4 text-primary font-semibold underline"
-        >
-          Inscreva-se no Canal
-        </a>
+        
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <BookOpenIcon className="h-5 w-5 text-primary" />
+              <h3 className="text-base font-medium">Passo a Passo</h3>
+            </div>
+            
+            <ol className="space-y-3 text-sm text-foreground/90 list-none ml-1">
+              <li className="flex gap-2">
+                <span className="flex items-center justify-center rounded-full bg-primary/10 text-primary font-medium h-6 w-6 flex-shrink-0">1</span>
+                <div>
+                  <strong className="text-foreground">Valor Inicial:</strong> Insira o montante que você já possui investido.
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="flex items-center justify-center rounded-full bg-primary/10 text-primary font-medium h-6 w-6 flex-shrink-0">2</span>
+                <div>
+                  <strong className="text-foreground">Aportes:</strong> Digite o valor que planeja investir regularmente.
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="flex items-center justify-center rounded-full bg-primary/10 text-primary font-medium h-6 w-6 flex-shrink-0">3</span>
+                <div>
+                  <strong className="text-foreground">Período de Aporte:</strong> Selecione a frequência dos seus aportes.
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="flex items-center justify-center rounded-full bg-primary/10 text-primary font-medium h-6 w-6 flex-shrink-0">4</span>
+                <div>
+                  <strong className="text-foreground">Taxa de Juros:</strong> Insira a taxa de rendimento esperada para o investimento.
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="flex items-center justify-center rounded-full bg-primary/10 text-primary font-medium h-6 w-6 flex-shrink-0">5</span>
+                <div>
+                  <strong className="text-foreground">Período:</strong> Defina por quanto tempo planeja investir.
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="flex items-center justify-center rounded-full bg-primary/10 text-primary font-medium h-6 w-6 flex-shrink-0">6</span>
+                <div>
+                  <strong className="text-foreground">Opções Avançadas:</strong> Explore ajustes por inflação, reinvestimento de dividendos e cálculo por meta.
+                </div>
+              </li>
+            </ol>
+          </div>
+          
+          <div className="space-y-5">
+            <div className="rounded-lg overflow-hidden border">
+              <iframe
+                className="w-full aspect-video"
+                src="https://www.youtube.com/embed/KnHGvReXzV0"
+                title="Vídeo Tutorial"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+            
+            {/* <div className="bg-primary/5 p-4 rounded-lg">
+              <div className="flex flex-col items-center text-center space-y-3">
+                <InfoIcon className="h-5 w-5 text-primary" />
+                <p className="text-sm">
+                  Quer aprender mais sobre investimentos e fazer parte da nossa comunidade?
+                </p>
+                
+                <Button 
+                  asChild
+                  className="gap-2 text-sm"
+                  variant="default"
+                >
+                  <a
+                    href="https://www.youtube.com/@capitalrico"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <YoutubeIcon className="h-4 w-4" />
+                    Inscreva-se no Canal
+                  </a>
+                </Button>
+              </div>
+            </div> */}
+          </div>
+        </div>
       </div>
     </Card>
   );
