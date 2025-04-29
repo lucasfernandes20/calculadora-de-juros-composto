@@ -41,6 +41,32 @@ export const metadata: Metadata = {
   authors: [{ name: "Capital Rico", url: "https://capitalrico.com" }],
   creator: "Capital Rico",
   publisher: "Capital Rico",
+  metadataBase: new URL("https://capitalrico.com"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    title: "Calculadora de juros compostos: Online e Grátis",
+    description: "Calculadora de juros compostos online para investimento financeiro. Simule seu futuro financeiro.",
+    siteName: "Capital Rico",
+    locale: "pt_BR",
+    images: [
+      {
+        url: "/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Calculadora de juros compostos",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Calculadora de juros compostos: Online e Grátis",
+    description: "Calculadora de juros compostos online para investimento financeiro. Simule seu futuro financeiro.",
+    images: ["/images/og-image.jpg"],
+    creator: "@capitalrico",
+  },
 };
 
 export default function RootLayout({

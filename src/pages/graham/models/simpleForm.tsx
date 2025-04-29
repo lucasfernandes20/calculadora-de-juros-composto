@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/tooltip";
 import { GrahamValues } from "@/utils/calcGrahamPrice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash2Icon } from "lucide-react";
+import { Trash2Icon, InfoIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -65,50 +65,112 @@ const SimpleForm: React.FC<SimpleFormProps> = (props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-1 gap-4 gap-x-12 md:grid-cols-2"
+        className="grid grid-cols-1 gap-y-6 gap-x-8 md:grid-cols-2"
       >
-        <FormField
-          control={form.control}
-          name="lpa"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>LPA (Lucro por Ação)</FormLabel>
-              <FormControl>
-                <Input {...field} mask="currency" />
-              </FormControl>
-              <FormMessage>{form.formState.errors.lpa?.message}</FormMessage>
-            </FormItem>
-          )}
-        />
+        <div className="space-y-6 md:col-span-2">
+          <div className="bg-muted/30 p-4 rounded-lg">
+            <h3 className="text-sm font-medium text-foreground/80 mb-4">Dados financeiros da ação</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="lpa"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center justify-between">
+                      <FormLabel className="text-foreground/70 flex items-center gap-1">
+                        LPA (Lucro por Ação)
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <InfoIcon className="h-3.5 w-3.5 text-muted-foreground/70 cursor-help" />
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="max-w-xs">
+                              <p className="text-xs">O Lucro por Ação (LPA) é calculado dividindo o lucro líquido da empresa pelo número total de ações em circulação.</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </FormLabel>
+                    </div>
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        mask="currency" 
+                        placeholder="Digite o LPA da empresa"
+                        prefix="$"
+                        className="bg-background"
+                      />
+                    </FormControl>
+                    <FormMessage>{form.formState.errors.lpa?.message}</FormMessage>
+                  </FormItem>
+                )}
+              />
 
-        <FormField
-          control={form.control}
-          name="vpa"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>VPA (Valor Patrimonial por Ação)</FormLabel>
-              <FormControl>
-                <Input {...field} mask="currency" />
-              </FormControl>
-              <FormMessage>{form.formState.errors.vpa?.message}</FormMessage>
-            </FormItem>
-          )}
-        />
+              <FormField
+                control={form.control}
+                name="vpa"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center justify-between">
+                      <FormLabel className="text-foreground/70 flex items-center gap-1">
+                        VPA (Valor Patrimonial por Ação)
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <InfoIcon className="h-3.5 w-3.5 text-muted-foreground/70 cursor-help" />
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="max-w-xs">
+                              <p className="text-xs">O Valor Patrimonial por Ação (VPA) é o valor do patrimônio líquido da empresa dividido pelo número total de ações.</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </FormLabel>
+                    </div>
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        mask="currency" 
+                        placeholder="Digite o VPA da empresa"
+                        prefix="$"
+                        className="bg-background"
+                      />
+                    </FormControl>
+                    <FormMessage>{form.formState.errors.vpa?.message}</FormMessage>
+                  </FormItem>
+                )}
+              />
+            </div>
+            
+            <div className="pt-6 flex flex-col space-y-2">
+              <p className="text-xs text-muted-foreground">
+                A fórmula de Graham é calculada como: √(22.5 × LPA × VPA)
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Essa fórmula estima o valor intrínseco, assumindo um PE razoável de 15 e um PBV de 1.5
+              </p>
+            </div>
+          </div>
+        </div>
 
-        <div className="flex items-center gap-2 mt-2">
-          <Button type="submit" className="font-bold max-w-60 flex-1">
-            Calcular
+        <div className="flex items-center gap-3 md:col-span-2">
+          <Button 
+            type="submit" 
+            className="font-medium max-w-60 flex-1 shadow-sm gap-2"
+            size="lg"
+          >
+            Calcular Valor Intrínseco
           </Button>
           <TooltipProvider>
             <Tooltip delayDuration={100}>
               <TooltipTrigger asChild>
                 <Button
                   variant="outline"
-                  type="button"
                   size="icon"
+                  type="button"
                   onClick={handleClear}
+                  className="h-10 w-10"
                 >
-                  <Trash2Icon className="text-primary" />
+                  <Trash2Icon className="text-primary h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Limpar dados</TooltipContent>
